@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: giffer
+server:
+  port: 7081
+  servlet:
+    context-path: /API/v1/
+changer:
+  url: https://openexchangerates.org/api
+  token: <TOKEN>
+  base: USD
