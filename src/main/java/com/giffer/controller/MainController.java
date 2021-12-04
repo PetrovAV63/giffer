@@ -1,32 +1,37 @@
 package com.giffer.controller;
 
-import com.giffer.client.ChangerClient;
-import com.giffer.model.ChangerFallBack;
-import com.giffer.model.ChangerModel;
-import com.giffer.service.ChangerService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import com.giffer.service.InterfaceChanger;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Map;
+
 @RequestMapping("/gifs")
 @RestController
-@RequiredArgsConstructor
 public class MainController {
 
-    private final ChangerService service;
+    private final InterfaceChanger changer;
 
-
-
-    @GetMapping
-    public void getGif() {
-        ChangerModel model = service.getLatestCourse("USD");
-         String s = model.getDisclaimer();
-        System.out.println(s);
+    public MainController(InterfaceChanger changer) {
+        this.changer = changer;
     }
 
+    @GetMapping
+    public List<String> getKeysCurrency() {
+        return changer.getListKeyCurrency();
+    }
 
+    @GetMapping("/{key}")
+    public Map<String, Double> getOneValue(@PathVariable String key) {
+        return changer.getOneValue(key);
+    }
+
+    @GetMapping("/latest")
+    public Map<String, Double> getLatest() {
+        return changer.getLatest();
+    }
 
 }
