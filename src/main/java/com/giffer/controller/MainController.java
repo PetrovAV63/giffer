@@ -1,11 +1,13 @@
 package com.giffer.controller;
 
 import com.giffer.service.InterfaceChanger;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,14 +26,15 @@ public class MainController {
         return changer.getListKeyCurrency();
     }
 
-    @GetMapping("/{key}")
-    public Map<String, Double> getOneValue(@PathVariable String key) {
-        return changer.getOneValue(key);
-    }
-
-    @GetMapping("/latest")
-    public Map<String, Double> getLatest() {
-        return changer.getLatest();
+    @GetMapping("/test/{key}")
+    public ResponseEntity getResult(@PathVariable("key") String key) {
+        Map<String, Boolean> resp = new HashMap<>();
+        if (changer.getCurrenciesChange().containsKey(key)) {
+            resp.put(key, changer.getCurrenciesChange().get(key));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+       return ResponseEntity.ok(resp);
     }
 
 }
